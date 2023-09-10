@@ -1,2 +1,3 @@
-import * as TimeClock from "./src/app/timeclock.ts";
-await TimeClock.main();
+import { TimeClock } from "./src/app/timeclock.ts";
+const timeclock = new TimeClock();
+await timeclock.main();
