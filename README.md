@@ -6,7 +6,7 @@ A timeclock solution for freelance developers to track billable hours.
 [Install deno!](https://deno.land/manual/getting_started/installation#installation)
 
 
-_**Note:** Add `--allow-run --allow-read --allow-write` to commands skip security prompts._
+_**Note:** Add `--allow-run --allow-read --allow-write` to skip security prompts._
 
 ### Create your first punch
 
