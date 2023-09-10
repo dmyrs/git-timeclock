@@ -21,6 +21,6 @@ export class TimeClock {
         const punch = new Punch(punchType, user);
         
         await this.validateCleanWorkingTreeAsync();
-        await _punchHandler.createPunchAsync(punch);
+        await this._punchHandler.createPunchAsync(punch);
     }
 }
