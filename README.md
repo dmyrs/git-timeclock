@@ -11,10 +11,10 @@ _**Note:** Add `--allow-run --allow-read --allow-write` to commands skip securit
 ### Create your first punch
 
 ```
-deno run https://deno.land/x/git_timeclock@v0.1.0-alpha/src/app/timeclock.ts <username>
+deno run https://deno.land/x/git_timeclock@v0.1.0-alpha/mod.ts <username>
 ```
 
 ### End a shift
 
 ```
-deno run https://deno.land/x/git_timeclock@v0.1.0-alpha/src/app/timeclock.ts <username> --end
+deno run https://deno.land/x/git_timeclock@v0.1.0-alpha/mod.ts <username> --end
