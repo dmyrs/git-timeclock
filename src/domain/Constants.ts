@@ -1,0 +1,1 @@
+export const ONE_HOUR_IN_MS: number = 3600000;
