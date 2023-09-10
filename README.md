@@ -6,15 +6,15 @@ A timeclock solution for freelance developers to track billable hours.
 [Install deno!](https://deno.land/manual/getting_started/installation#installation)
 
 
-_**Note:** Add `--allow-run --allow-read --allow-write` to commands skip security prompts._
+_**Note:** Add `--allow-run --allow-read --allow-write` to skip security prompts._
 
 ### Create your first punch
 
 ```
-deno run https://deno.land/x/git_timeclock@v0.1.0-alpha/mod.ts <username>
+deno run https://deno.land/x/git_timeclock@v0.1.1-alpha/mod.ts <username>
 ```
 
 ### End a shift
 
 ```
-deno run https://deno.land/x/git_timeclock@v0.1.0-alpha/mod.ts <username> --end
+deno run https://deno.land/x/git_timeclock@v0.1.1-alpha/mod.ts <username> --end
