@@ -7,9 +7,6 @@ import { Shift } from "../../domain/Shift/Shift.ts";
 import { ShiftHandler } from "../Shift/ShiftHandler.ts";
 
 export class PunchHandler implements IPunchHandler {
-    constructor() {
-    }
-
     async createPunchAsync(punch: Punch): Promise<void> {
         if (punch.type === PunchType.Sart) {
             await this.createStartPunchAsync(punch);
