@@ -1,4 +1,5 @@
 import * as DomainConstants from "../Constants.ts";
+import { toFixed } from "https://deno.land/x/math@v1.1.0/to_fixed.ts";
 
 export class Shift {
     user: string;
@@ -17,10 +18,10 @@ export class Shift {
 
     constructor(user: string, diffHours: number, filename: string, date: Date, rate: number) {
         this.user = user;
-        this.diffHours = diffHours;
+        this.diffHours = Number.parseFloat(toFixed(diffHours, 2));
         this.shiftDir = `./.timeclock/shifts/${user}`;
         this.shiftFilePath = `${this.shiftDir}/${filename}`;
         this.date = date;
-        this.amountDue = this.diffHours * rate; // todo - impl
+        this.amountDue = this.diffHours * rate;
     }
 }
