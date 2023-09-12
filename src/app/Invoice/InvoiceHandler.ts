@@ -13,7 +13,9 @@ export class InvoiceHandler implements IInvoiceHandler {
         const invoiceData: Dictionary<Shift[]> = {};
         
         for(const userDir of userDirs) {
-            invoiceData[userDir] = await this.getUserShiftsAsync(userDir);
+            const splitDir = userDir.split('/');
+            const userName = splitDir[splitDir.length-1];
+            invoiceData[userName] = await this.getUserShiftsAsync(userName, userDir);
         }
         const invoice = new Invoice(invoiceData, invoicee, companyName, new Date());
 
@@ -23,7 +25,7 @@ export class InvoiceHandler implements IInvoiceHandler {
         (await executeShellCommandAsync("git", ["commit", "-m", `\"TIMECLOCK INVOICE - ${invoice.invoiceDate.toISOString().split('T')[0]}\"`])).verifyZeroReturnCode();
     }
 
-    private async getUserShiftsAsync(userDir: string): Promise<Shift[]> {
+    private async getUserShiftsAsync(userName: string, userDir: string): Promise<Shift[]> {
         const shifts: Shift[] = [];
         const filenames = await getFilesNamesInDirectory(userDir);
         for(const filename of filenames) {
@@ -31,8 +33,6 @@ export class InvoiceHandler implements IInvoiceHandler {
             const splitShift = shiftContent.split('_');
             const shiftLength: number = Number.parseInt(splitShift[0]);
             const shiftDate: Date = parse(splitShift[1], 'yyyy-MM-dd');
-            const splitDir = userDir.split('/');
-            const userName = splitDir[splitDir.length-1];
             const shift = new Shift(userName, shiftLength, filename, shiftDate);
             shifts.push(shift);
             await Deno.remove(shift.shiftFilePath);
@@ -46,9 +46,8 @@ export class InvoiceHandler implements IInvoiceHandler {
 
         fileLines.push('---------------\n');
         fileLines.push(`${invoice.company} Invoice\n`);
-        fileLines.push(`Billed to: ${invoice.invoicee}\n`);
+        fileLines.push(`Bill to: ${invoice.invoicee}\n`);
         fileLines.push('---------------\n');
-        fileLines.push('\n');
         fileLines.push('\n');
         fileLines.push('---------------\n');
         fileLines.push('User Invoices\n');
