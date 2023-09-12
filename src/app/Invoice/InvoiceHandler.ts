@@ -9,12 +9,11 @@ import { parse } from "https://deno.land/std@0.201.0/datetime/mod.ts";
 
 export class InvoiceHandler implements IInvoiceHandler {
     public async createInvoiceAsync(invoicee: string, companyName: string): Promise<void> {
-        const users = await getNonEmptyDirectoriesAsync('./.timeclock/shifts');
-        console.log('non empty dirs', users.join(','));
+        const userDirs = await getNonEmptyDirectoriesAsync('./.timeclock/shifts');
         const invoiceData: Dictionary<Shift[]> = {};
         
-        for(const user of users) {
-            invoiceData[user] = await this.getUserShiftsAsync(user);
+        for(const userDir of userDirs) {
+            invoiceData[userDir] = await this.getUserShiftsAsync(userDir);
         }
         const invoice = new Invoice(invoiceData, invoicee, companyName, new Date());
 
@@ -24,15 +23,16 @@ export class InvoiceHandler implements IInvoiceHandler {
         (await executeShellCommandAsync("git", ["commit", "-m", `\"TIMECLOCK INVOICE - ${invoice.invoiceDate.toISOString().split('T')[0]}\"`])).verifyZeroReturnCode();
     }
 
-    private async getUserShiftsAsync(user: string): Promise<Shift[]> {
+    private async getUserShiftsAsync(userDir: string): Promise<Shift[]> {
         const shifts: Shift[] = [];
-        const filenames = await getFilesNamesInDirectory(`./.timeclock/shifts/${user}`);
+        const filenames = await getFilesNamesInDirectory(userDir);
+        console.log('filenames!', filenames.join(','));
         for(const filename in filenames) {
-            const shiftContent: string = await Deno.readTextFile(`./.timeclock/shifts/${user}/${filename}`);
+            const shiftContent: string = await Deno.readTextFile(`${userDir}/${filename}`);
             const splitShift = shiftContent.split('-');
             const shiftLength: number = Number.parseInt(splitShift[0]);
             const shiftDate: Date = parse(splitShift[1], 'yyyy-MM-dd');
-            const shift = new Shift(user, shiftLength, filename, shiftDate);
+            const shift = new Shift(userDir, shiftLength, filename, shiftDate);
             shifts.push(shift);
             await Deno.remove(shift.shiftFilePath);
             (await executeShellCommandAsync("git", ["add", shift.shiftFilePath])).verifyZeroReturnCode();
