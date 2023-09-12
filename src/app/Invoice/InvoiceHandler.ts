@@ -83,7 +83,7 @@ export class InvoiceHandler implements IInvoiceHandler {
         lines.push('Shifts:\n');
         lines.push('  Date|Hours\n');
         for(const shift of shifts) {
-            lines.push(`  ${shift.date.toISOString().split('T'[0])}|${shift.diffHours}'\n`);
+            lines.push(`  ${shift.date.toISOString().split('T')[0]}|${shift.diffHours}'\n`);
         }
         lines.push(`Hours: ${hours}\n`);
         lines.push(`Amount Due: ${cost}\n`);
