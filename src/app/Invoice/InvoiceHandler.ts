@@ -32,7 +32,9 @@ export class InvoiceHandler implements IInvoiceHandler {
             const splitShift = shiftContent.split('_');
             const shiftLength: number = Number.parseInt(splitShift[0]);
             const shiftDate: Date = parse(splitShift[1], 'yyyy-MM-dd');
-            const shift = new Shift(userDir, shiftLength, filename, shiftDate);
+            const splitDir = userDir.split('/');
+            const userName = splitDir[splitDir.length-1];
+            const shift = new Shift(userName, shiftLength, filename, shiftDate);
             shifts.push(shift);
             await Deno.remove(shift.shiftFilePath);
             (await executeShellCommandAsync("git", ["add", shift.shiftFilePath])).verifyZeroReturnCode();
