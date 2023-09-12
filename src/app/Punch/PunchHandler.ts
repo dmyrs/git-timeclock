@@ -30,7 +30,7 @@ export class PunchHandler implements IPunchHandler {
     private async createEndPunchAsync(punch: Punch) {
         const nowUtcMs = Date.now().toString();
         const punchStartUtcMs = await Deno.readTextFile(punch.punchFilePath);
-        const shift: Shift = new Shift(punch.user, punchStartUtcMs, nowUtcMs);
+        const shift: Shift = Shift.createFromPunchTimes(punch.user, punchStartUtcMs, nowUtcMs, new Date());
 
         await Deno.remove(punch.punchFilePath);
         (await executeShellCommandAsync("git", ["add", punch.punchFilePath])).verifyZeroReturnCode();

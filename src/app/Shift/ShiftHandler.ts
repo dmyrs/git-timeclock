@@ -6,7 +6,7 @@ import { executeShellCommandAsync } from "../../infra/IO/Shell.ts";
 export class ShiftHandler implements IShiftHandler {
   public async createShiftAsync(shift: Shift): Promise<void> {
     await FileManager.createDirectoryAsync(shift.shiftDir);
-    await Deno.writeTextFile(shift.shiftFilePath, shift.diffHours.toString());
+    await Deno.writeTextFile(shift.shiftFilePath, `${shift.diffHours.toString()}-${new Date().toISOString().split('T')[0]}`);
     (await executeShellCommandAsync("git", ["add", shift.shiftFilePath])).verifyZeroReturnCode();
   }
 }

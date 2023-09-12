@@ -24,3 +24,13 @@ export async function getNonEmptyDirectoriesAsync(path: string): Promise<string[
     }
     return dirs;
 }
+
+export async function getFilesNamesInDirectory(path: string): Promise<string[]> {
+  const files: string[] = [];
+  for await (const dirEntry of Deno.readDir(path)) {
+    if (dirEntry.isFile) {
+      files.push(dirEntry.name)
+    }
+  }
+  return files;
+}

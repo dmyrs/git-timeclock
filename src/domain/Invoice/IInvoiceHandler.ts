@@ -1,3 +1,3 @@
 export interface IInvoiceHandler {
-    createInvoiceAsync(): Promise<void>;
+    createInvoiceAsync(invoicee: string, companyName: string): Promise<void>;
 }

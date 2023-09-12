@@ -1,14 +1,87 @@
 import { IInvoiceHandler } from "../../domain/Invoice/IInvoiceHandler.ts";
-import { getNonEmptyDirectoriesAsync } from "../../infra/IO/Files.ts";
+import { Invoice } from "../../domain/Invoice/Invoice.ts";
+import { Shift } from "../../domain/Shift/Shift.ts";
+import { getFilesNamesInDirectory, getNonEmptyDirectoriesAsync } from "../../infra/IO/Files.ts";
+import { Dictionary } from "../../infra/Types/Types.ts";
+import * as FileManager from "../../infra/IO/Files.ts";
+import { executeShellCommandAsync } from "../../infra/IO/Shell.ts";
+import { parse } from "https://deno.land/std@0.201.0/datetime/mod.ts";
 
 export class InvoiceHandler implements IInvoiceHandler {
-    private _invoicesDir: string = './.timeclock/invoices';
-
-    public async createInvoiceAsync(): Promise<void> {
+    public async createInvoiceAsync(invoicee: string, companyName: string): Promise<void> {
         const users = await getNonEmptyDirectoriesAsync('./.timeclock/shifts');
-        // read all invoices for all users
-        // create dict
-        // write to file
-        // delete the shifts
+        const invoiceData: Dictionary<Shift[]> = {};
+        
+        for(const user in users) {
+            invoiceData[user] = await this.getUserShiftsAsync(user);
+        }
+        const invoice = new Invoice(invoiceData, invoicee, companyName, new Date());
+
+        await FileManager.createDirectoryAsync(invoice.invoiceDir);
+        await this.writeInvoiceFile(invoice);
+        
+        (await executeShellCommandAsync("git", ["commit", "-m", `\"TIMECLOCK INVOICE - ${invoice.invoiceDate.toISOString().split('T')[0]}\"`])).verifyZeroReturnCode();
+    }
+
+    private async getUserShiftsAsync(user: string): Promise<Shift[]> {
+        const shifts: Shift[] = [];
+        const filenames = await getFilesNamesInDirectory(`./.timeclock/shifts/${user}`);
+        for(const filename in filenames) {
+            const shiftContent: string = await Deno.readTextFile(`./.timeclock/shifts/${user}/${filename}`);
+            const splitShift = shiftContent.split('-');
+            const shiftLength: number = Number.parseInt(splitShift[0]);
+            const shiftDate: Date = parse(splitShift[1], 'yyyy-MM-dd');
+            const shift = new Shift(user, shiftLength, filename, shiftDate);
+            shifts.push(shift);
+            await Deno.remove(shift.shiftFilePath);
+            (await executeShellCommandAsync("git", ["add", shift.shiftFilePath])).verifyZeroReturnCode();
+        }
+        return shifts;
+    }
+
+    private async writeInvoiceFile(invoice: Invoice): Promise<void> {
+        let fileLines: string[] = [];
+
+        fileLines.push('---------------');
+        fileLines.push(`${invoice.company} Invoice`);
+        fileLines.push(`Billed to: ${invoice.invoicee}`);
+        fileLines.push('---------------');
+        fileLines.push('');
+        fileLines.push('');
+        fileLines.push('---------------');
+        fileLines.push('User Invoices');
+        fileLines.push('---------------');
+        fileLines.push('');
+        for(const user in invoice.userInvoices) {
+            const [shifts, hours, cost] = invoice.userInvoices[user];
+            const userLines = this.createUserInvoiceLines(user, shifts, hours, cost);
+            fileLines = fileLines.concat(userLines);
+            fileLines.push('');
+            fileLines.push('-----');
+            fileLines.push('');
+        }
+        fileLines.push('');
+        fileLines.push('---------------');
+        fileLines.push('Totals');
+        fileLines.push('---------------');
+        fileLines.push('');
+        fileLines.push(`Total Hours: ${invoice.totalHours}`);
+        fileLines.push(`Total Cost: ${invoice.totalCost}`);
+
+        (await executeShellCommandAsync("git", ["add", invoice.invoiceFilePath])).verifyZeroReturnCode();
+    }
+
+    private createUserInvoiceLines(user: string, shifts: Shift[], hours: number, cost: number): string[] {
+        const lines: string[] = [];
+
+        lines.push(`User: ${user}`);
+        lines.push('Shifts:');
+        lines.push('  Date|Hours');
+        for(const shift of shifts) {
+            lines.push(`  ${shift.date.toISOString().split('T'[0])}|${shift.diffHours}'`);
+        }
+        lines.push(`Hours: ${hours}`);
+        lines.push(`Cost: ${cost}`);
+        return lines;
     }
 }
