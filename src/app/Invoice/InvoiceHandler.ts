@@ -27,7 +27,7 @@ export class InvoiceHandler implements IInvoiceHandler {
         const shifts: Shift[] = [];
         const filenames = await getFilesNamesInDirectory(userDir);
         console.log('filenames!', filenames.join(','));
-        for(const filename in filenames) {
+        for(const filename of filenames) {
             const shiftContent: string = await Deno.readTextFile(`${userDir}/${filename}`);
             const splitShift = shiftContent.split('-');
             const shiftLength: number = Number.parseInt(splitShift[0]);
