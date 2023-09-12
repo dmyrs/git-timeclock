@@ -44,31 +44,31 @@ export class InvoiceHandler implements IInvoiceHandler {
     private async writeInvoiceFile(invoice: Invoice): Promise<void> {
         let fileLines: string[] = [];
 
-        fileLines.push('---------------');
-        fileLines.push(`${invoice.company} Invoice`);
-        fileLines.push(`Billed to: ${invoice.invoicee}`);
-        fileLines.push('---------------');
+        fileLines.push('---------------\n');
+        fileLines.push(`${invoice.company} Invoice\n`);
+        fileLines.push(`Billed to: ${invoice.invoicee}\n`);
+        fileLines.push('---------------\n');
         fileLines.push('\n');
         fileLines.push('\n');
-        fileLines.push('---------------');
-        fileLines.push('User Invoices');
-        fileLines.push('---------------');
+        fileLines.push('---------------\n');
+        fileLines.push('User Invoices\n');
+        fileLines.push('---------------\n');
         fileLines.push('\n');
         for(const user in invoice.userInvoices) {
             const [shifts, hours, cost] = invoice.userInvoices[user];
             const userLines = this.createUserInvoiceLines(user, shifts, hours, cost);
             fileLines = fileLines.concat(userLines);
             fileLines.push('\n');
-            fileLines.push('-----');
+            fileLines.push('-----\n');
             fileLines.push('\n');
         }
         fileLines.push('\n');
-        fileLines.push('---------------');
-        fileLines.push('Totals');
-        fileLines.push('---------------');
+        fileLines.push('---------------\n');
+        fileLines.push('Totals\n');
+        fileLines.push('---------------\n');
         fileLines.push('\n');
-        fileLines.push(`Total Hours: ${invoice.totalHours}`);
-        fileLines.push(`Total Amount Due: ${invoice.amountDue}`);
+        fileLines.push(`Total Hours: ${invoice.totalHours}\n`);
+        fileLines.push(`Total Amount Due: ${invoice.amountDue}\n`);
 
         for(const line of fileLines) {
             await Deno.writeTextFile(invoice.invoiceFilePath, line, { append: true });
@@ -80,14 +80,14 @@ export class InvoiceHandler implements IInvoiceHandler {
     private createUserInvoiceLines(user: string, shifts: Shift[], hours: number, cost: number): string[] {
         const lines: string[] = [];
 
-        lines.push(`User: ${user}`);
-        lines.push('Shifts:');
-        lines.push('  Date|Hours');
+        lines.push(`User: ${user}\n`);
+        lines.push('Shifts:\n');
+        lines.push('  Date|Hours\n');
         for(const shift of shifts) {
-            lines.push(`  ${shift.date.toISOString().split('T'[0])}|${shift.diffHours}'`);
+            lines.push(`  ${shift.date.toISOString().split('T'[0])}|${shift.diffHours}'\n`);
         }
-        lines.push(`Hours: ${hours}`);
-        lines.push(`Amount Due: ${cost}`);
+        lines.push(`Hours: ${hours}\n`);
+        lines.push(`Amount Due: ${cost}\n`);
         return lines;
     }
 }
