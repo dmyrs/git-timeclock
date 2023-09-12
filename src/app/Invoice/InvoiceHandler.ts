@@ -31,7 +31,7 @@ export class InvoiceHandler implements IInvoiceHandler {
         for(const filename of filenames) {
             const shiftContent: string = await Deno.readTextFile(`${userDir}/${filename}`);
             const splitShift = shiftContent.split('_');
-            const shiftLength: number = Number.parseInt(splitShift[0]);
+            const shiftLength: number = Number.parseFloat(splitShift[0]);
             const shiftDate: Date = parse(splitShift[1], 'yyyy-MM-dd');
             const shift = new Shift(userName, shiftLength, filename, shiftDate);
             shifts.push(shift);
