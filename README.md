@@ -18,3 +18,10 @@ deno run https://deno.land/x/git_timeclock@v0.1.4-alpha/mod.ts <username>
 
 ```
 deno run https://deno.land/x/git_timeclock@v0.1.4-alpha/mod.ts <username> --end
+```
+
+### Create an Invoice
+
+```
+deno run https://deno.land/x/git_timeclock@v0.1.4-alpha/mod.ts <username> --invoice "Invoicee" "dmyrs Software" 15
+```
