@@ -26,7 +26,6 @@ export class InvoiceHandler implements IInvoiceHandler {
     private async getUserShiftsAsync(userDir: string): Promise<Shift[]> {
         const shifts: Shift[] = [];
         const filenames = await getFilesNamesInDirectory(userDir);
-        console.log('filenames!', filenames.join(','));
         for(const filename of filenames) {
             const shiftContent: string = await Deno.readTextFile(`${userDir}/${filename}`);
             const splitShift = shiftContent.split('_');
@@ -70,6 +69,10 @@ export class InvoiceHandler implements IInvoiceHandler {
         fileLines.push('');
         fileLines.push(`Total Hours: ${invoice.totalHours}`);
         fileLines.push(`Total Amount Due: ${invoice.amountDue}`);
+
+        for(const line of fileLines) {
+            await Deno.writeTextFile(invoice.invoiceFilePath, line, { append: true });
+        }
 
         (await executeShellCommandAsync("git", ["add", invoice.invoiceFilePath])).verifyZeroReturnCode();
     }
