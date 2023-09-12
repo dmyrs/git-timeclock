@@ -1,6 +1,7 @@
 import { Dictionary } from "../../infra/Types/Types.ts";
 import { Shift } from "../Shift/Shift.ts";
 import { sumOf } from "https://deno.land/std@0.201.0/collections/mod.ts";
+import { toFixed } from "https://deno.land/x/math@v1.1.0/to_fixed.ts";
 
 export class Invoice{
     userInvoices: Dictionary<[shifts: Shift[], totalHours: number, totalCost: number]>;
@@ -33,5 +34,6 @@ export class Invoice{
         this.invoicee = invoicee;
         this.company = company;
         this.invoiceDate = invoiceDate;
+        this.totalHours = Number.parseFloat(toFixed(this.totalHours, 2));
     }
 }
