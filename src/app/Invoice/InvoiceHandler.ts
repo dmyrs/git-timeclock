@@ -8,14 +8,14 @@ import { executeShellCommandAsync } from "../../infra/IO/Shell.ts";
 import { parse } from "https://deno.land/std@0.201.0/datetime/mod.ts";
 
 export class InvoiceHandler implements IInvoiceHandler {
-    public async createInvoiceAsync(invoicee: string, companyName: string): Promise<void> {
+    public async createInvoiceAsync(invoicee: string, companyName: string, rate: number): Promise<void> {
         const userDirs = await getNonEmptyDirectoriesAsync('./.timeclock/shifts');
         const invoiceData: Dictionary<Shift[]> = {};
         
         for(const userDir of userDirs) {
             const splitDir = userDir.split('/');
             const userName = splitDir[splitDir.length-1];
-            invoiceData[userName] = await this.getUserShiftsAsync(userName, userDir);
+            invoiceData[userName] = await this.getUserShiftsAsync(userName, userDir, rate);
         }
         const invoice = new Invoice(invoiceData, invoicee, companyName, new Date());
 
@@ -25,7 +25,7 @@ export class InvoiceHandler implements IInvoiceHandler {
         (await executeShellCommandAsync("git", ["commit", "-m", `\"TIMECLOCK INVOICE - ${invoice.invoiceDate.toISOString().split('T')[0]}\"`])).verifyZeroReturnCode();
     }
 
-    private async getUserShiftsAsync(userName: string, userDir: string): Promise<Shift[]> {
+    private async getUserShiftsAsync(userName: string, userDir: string, rate: number): Promise<Shift[]> {
         const shifts: Shift[] = [];
         const filenames = await getFilesNamesInDirectory(userDir);
         for(const filename of filenames) {
@@ -33,7 +33,7 @@ export class InvoiceHandler implements IInvoiceHandler {
             const splitShift = shiftContent.split('_');
             const shiftLength: number = Number.parseFloat(splitShift[0]);
             const shiftDate: Date = parse(splitShift[1], 'yyyy-MM-dd');
-            const shift = new Shift(userName, shiftLength, filename, shiftDate);
+            const shift = new Shift(userName, shiftLength, filename, shiftDate, rate);
             shifts.push(shift);
             await Deno.remove(shift.shiftFilePath);
             (await executeShellCommandAsync("git", ["add", shift.shiftFilePath])).verifyZeroReturnCode();
@@ -65,7 +65,6 @@ export class InvoiceHandler implements IInvoiceHandler {
         fileLines.push('---------------\n');
         fileLines.push('Totals\n');
         fileLines.push('---------------\n');
-        fileLines.push('\n');
         fileLines.push(`Total Hours: ${invoice.totalHours}\n`);
         fileLines.push(`Total Amount Due: ${invoice.amountDue}\n`);
 

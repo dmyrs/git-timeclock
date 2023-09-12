@@ -20,7 +20,7 @@ export class TimeClock {
         const isInvoice: boolean = Deno.args.some(x => x === "--invoice");
 
         if (isInvoice) {
-            await this._invoiceHandler.createInvoiceAsync("Green Oak Building Co.", "dmyrs Software");
+            await this._invoiceHandler.createInvoiceAsync("Green Oak Building Co.", "dmyrs Software", 15.0);
         }
         else {
             const user: string = Deno.args[0];
