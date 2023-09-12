@@ -18,7 +18,7 @@ export class Shift {
 
     constructor(user: string, diffHours: number, filename: string, date: Date, rate: number) {
         this.user = user;
-        this.diffHours = Number.parseFloat(toFixed(diffHours, 2));
+        this.diffHours = diffHours;
         console.log('DIFF', this.diffHours);
         this.shiftDir = `./.timeclock/shifts/${user}`;
         this.shiftFilePath = `${this.shiftDir}/${filename}`;
@@ -26,5 +26,6 @@ export class Shift {
         this.amountDue = this.diffHours * rate;
         console.log('AMOUNT', this.amountDue);
         this.amountDue = Number.parseFloat(toFixed(this.amountDue, 2));
+        this.diffHours = Number.parseFloat(toFixed(diffHours, 2));
     }
 }
