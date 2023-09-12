@@ -11,17 +11,17 @@ _**Note:** Add `--allow-run --allow-read --allow-write` to skip security prompts
 ### Create your first punch
 
 ```
-deno run https://deno.land/x/git_timeclock@v0.1.4-alpha/mod.ts <username>
+deno run https://deno.land/x/git_timeclock@v0.1.4-alpha/mod.ts <username:string>
 ```
 
 ### End a shift
 
 ```
-deno run https://deno.land/x/git_timeclock@v0.1.4-alpha/mod.ts <username> --end
+deno run https://deno.land/x/git_timeclock@v0.1.4-alpha/mod.ts <username:string> <rate:decimal> --end
 ```
 
 ### Create an Invoice
 
 ```
-deno run https://deno.land/x/git_timeclock@v0.1.4-alpha/mod.ts <username> --invoice "Invoicee" "dmyrs Software" 15
+deno run https://deno.land/x/git_timeclock@v0.1.4-alpha/mod.ts <username> --invoice <invoicee:string> <company:string> <rate:decimal>
 ```

@@ -27,11 +27,13 @@ export class TimeClock {
             await this._invoiceHandler.createInvoiceAsync(invoicee, company, rate);
         }
         else {
-            const user: string = Deno.args[0];
+            const args = Deno.args.filter(x => !x.startsWith('--'));
+            const user: string = args[0];
             const isEndPunch: boolean = Deno.args.some(x => x === "--end");
+            const rate: number = isEndPunch ? Number.parseFloat(args[1]) : 0;
             const punchType: PunchType = isEndPunch ? PunchType.End : PunchType.Sart;
             const punch = new Punch(punchType, user);
-            await this._punchHandler.createPunchAsync(punch);
+            await this._punchHandler.createPunchAsync(punch, rate);
         }
     
     }
