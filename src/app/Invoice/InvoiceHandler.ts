@@ -66,7 +66,7 @@ export class InvoiceHandler implements IInvoiceHandler {
         fileLines.push('---------------');
         fileLines.push('');
         fileLines.push(`Total Hours: ${invoice.totalHours}`);
-        fileLines.push(`Total Cost: ${invoice.totalCost}`);
+        fileLines.push(`Total Amount Due: ${invoice.amountDue}`);
 
         (await executeShellCommandAsync("git", ["add", invoice.invoiceFilePath])).verifyZeroReturnCode();
     }
@@ -81,7 +81,7 @@ export class InvoiceHandler implements IInvoiceHandler {
             lines.push(`  ${shift.date.toISOString().split('T'[0])}|${shift.diffHours}'`);
         }
         lines.push(`Hours: ${hours}`);
-        lines.push(`Cost: ${cost}`);
+        lines.push(`Amount Due: ${cost}`);
         return lines;
     }
 }

@@ -1,10 +1,11 @@
 import { Dictionary } from "../../infra/Types/Types.ts";
 import { Shift } from "../Shift/Shift.ts";
+import { sumOf } from "https://deno.land/std@0.201.0/collections/mod.ts";
 
 export class Invoice{
     userInvoices: Dictionary<[shifts: Shift[], totalHours: number, totalCost: number]>;
     totalHours: number;
-    totalCost: number;
+    amountDue: number;
     invoiceDir: string;
     invoiceFilePath: string;
     invoicee: string;
@@ -12,14 +13,23 @@ export class Invoice{
     invoiceDate: Date;
 
     constructor(shifts: Dictionary<Shift[]>, invoicee: string, company: string, invoiceDate: Date) {
-        // todo - impl
-        this.userInvoices = {
-            jkdmyrs: [[], 0, 0]
-        };
+        this.userInvoices = {};
+        for (const user in shifts) {
+            const userShifts: Shift[] = shifts[user];
+            const hours: number = sumOf(userShifts, x => x.diffHours);
+            const cost: number = sumOf(userShifts, x => x.amountDue)
+            this.userInvoices[user] = [userShifts, hours, cost];
+        }
+
+        this.amountDue = 0;
         this.totalHours = 0;
-        this.totalCost = 0;
-        this.invoiceDir = "";
-        this.invoiceFilePath = "";
+        for(const user in this.userInvoices) {
+            const [_, hours, amountDue] = this.userInvoices[user];
+            this.totalHours+=hours;
+            this.amountDue+=amountDue;
+        }
+        this.invoiceDir = "./.timeclock/invoices";
+        this.invoiceFilePath = `${this.invoiceDir}/${invoiceDate.toISOString().split('T')[0]}`;
         this.invoicee = invoicee;
         this.company = company;
         this.invoiceDate = invoiceDate;

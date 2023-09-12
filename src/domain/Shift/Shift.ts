@@ -6,6 +6,7 @@ export class Shift {
     diffHours: number
     shiftDir: string;
     shiftFilePath: string;
+    amountDue: number;
 
     public static createFromPunchTimes(user: string, punchStartUtcMs: string, punchEndUtcMs: string, date: Date) {
         const diffMs: number = Number.parseInt(punchEndUtcMs) - Number.parseInt(punchStartUtcMs);
@@ -20,5 +21,6 @@ export class Shift {
         this.shiftDir = `./.timeclock/shifts/${user}`;
         this.shiftFilePath = `${this.shiftDir}/${filename}`;
         this.date = date;
+        this.amountDue = 0; // todo - impl
     }
 }
