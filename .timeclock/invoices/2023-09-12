@@ -1,0 +1,33 @@
+---------------
+jkdmyrs Invoice
+Bill to: test
+---------------
+
+---------------
+User Invoices
+---------------
+
+User: jkdmyrs
+Shifts:
+  Date|Hours
+  2023-09-12|0.18'
+Hours: 0.18
+Amount Due: 3.13
+
+-----
+
+User: jkdmyrs2
+Shifts:
+  Date|Hours
+  2023-09-12|2.12'
+Hours: 2.12
+Amount Due: 36.89
+
+-----
+
+
+---------------
+Totals
+---------------
+Total Hours: 2.3
+Total Amount Due: 40.02
