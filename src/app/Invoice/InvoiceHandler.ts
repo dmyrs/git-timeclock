@@ -48,25 +48,25 @@ export class InvoiceHandler implements IInvoiceHandler {
         fileLines.push(`${invoice.company} Invoice`);
         fileLines.push(`Billed to: ${invoice.invoicee}`);
         fileLines.push('---------------');
-        fileLines.push('');
-        fileLines.push('');
+        fileLines.push('\n');
+        fileLines.push('\n');
         fileLines.push('---------------');
         fileLines.push('User Invoices');
         fileLines.push('---------------');
-        fileLines.push('');
+        fileLines.push('\n');
         for(const user in invoice.userInvoices) {
             const [shifts, hours, cost] = invoice.userInvoices[user];
             const userLines = this.createUserInvoiceLines(user, shifts, hours, cost);
             fileLines = fileLines.concat(userLines);
-            fileLines.push('');
+            fileLines.push('\n');
             fileLines.push('-----');
-            fileLines.push('');
+            fileLines.push('\n');
         }
-        fileLines.push('');
+        fileLines.push('\n');
         fileLines.push('---------------');
         fileLines.push('Totals');
         fileLines.push('---------------');
-        fileLines.push('');
+        fileLines.push('\n');
         fileLines.push(`Total Hours: ${invoice.totalHours}`);
         fileLines.push(`Total Amount Due: ${invoice.amountDue}`);
 
