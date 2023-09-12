@@ -10,9 +10,10 @@ import { parse } from "https://deno.land/std@0.201.0/datetime/mod.ts";
 export class InvoiceHandler implements IInvoiceHandler {
     public async createInvoiceAsync(invoicee: string, companyName: string): Promise<void> {
         const users = await getNonEmptyDirectoriesAsync('./.timeclock/shifts');
+        console.log('non empty dirs', users.join(','));
         const invoiceData: Dictionary<Shift[]> = {};
         
-        for(const user in users) {
+        for(const user of users) {
             invoiceData[user] = await this.getUserShiftsAsync(user);
         }
         const invoice = new Invoice(invoiceData, invoicee, companyName, new Date());

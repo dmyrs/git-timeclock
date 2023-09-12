@@ -17,14 +17,13 @@ export class TimeClock {
     
     public async main() {
         await this.validateCleanWorkingTreeAsync();
-
-        const user: string = Deno.args[0];
         const isInvoice: boolean = Deno.args.some(x => x === "--invoice");
 
         if (isInvoice) {
             await this._invoiceHandler.createInvoiceAsync("Green Oak Building Co.", "dmyrs Software");
         }
         else {
+            const user: string = Deno.args[0];
             const isEndPunch: boolean = Deno.args.some(x => x === "--end");
             const punchType: PunchType = isEndPunch ? PunchType.End : PunchType.Sart;
             const punch = new Punch(punchType, user);
