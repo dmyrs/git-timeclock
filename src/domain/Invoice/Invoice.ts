@@ -35,5 +35,6 @@ export class Invoice{
         this.company = company;
         this.invoiceDate = invoiceDate;
         this.totalHours = Number.parseFloat(toFixed(this.totalHours, 2));
+        this.amountDue = Number.parseFloat(toFixed(this.amountDue, 2));
     }
 }
