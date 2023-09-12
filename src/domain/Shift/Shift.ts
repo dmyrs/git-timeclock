@@ -23,6 +23,7 @@ export class Shift {
         this.shiftFilePath = `${this.shiftDir}/${filename}`;
         this.date = date;
         this.amountDue = this.diffHours * rate;
+        console.log('AMOUNT', this.amountDue);
         this.amountDue = Number.parseFloat(toFixed(this.amountDue, 2));
     }
 }
