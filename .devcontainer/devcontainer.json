@@ -6,10 +6,13 @@
 	"image": "mcr.microsoft.com/devcontainers/base:jammy",
 	"customizations": {
 		"vscode": {
+			"extensions": [
+				"denoland.vscode-deno"
+			],
 			"settings": {
 				"workbench.sideBar.location": "right",
-				"git.autofetch": true
-				//"deno.enable": true
+				"git.autofetch": true,
+				"deno.enable": true
 			}
 		}
 	},
