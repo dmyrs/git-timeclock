@@ -6,6 +6,7 @@ import { Dictionary } from "../../infra/Types/Types.ts";
 import * as FileManager from "../../infra/IO/Files.ts";
 import { executeShellCommandAsync } from "../../infra/IO/Shell.ts";
 import { parse } from "https://deno.land/std@0.201.0/datetime/mod.ts";
+import { format } from "../../domain/DateExtensions.ts";
 
 export class InvoiceHandler implements IInvoiceHandler {
     public async createInvoiceAsync(invoicee: string, companyName: string, rate: number): Promise<void> {
@@ -22,7 +23,7 @@ export class InvoiceHandler implements IInvoiceHandler {
         await FileManager.createDirectoryAsync(invoice.invoiceDir);
         await this.writeInvoiceFile(invoice);
         
-        (await executeShellCommandAsync("git", ["commit", "-m", `\"TIMECLOCK INVOICE - ${invoice.invoiceDate.toISOString().split('T')[0]}\"`])).verifyZeroReturnCode();
+        (await executeShellCommandAsync("git", ["commit", "-m", `\"TIMECLOCK INVOICE - ${format(invoice.invoiceDate)}\"`])).verifyZeroReturnCode();
     }
 
     private async getUserShiftsAsync(userName: string, userDir: string, rate: number): Promise<Shift[]> {
@@ -82,7 +83,7 @@ export class InvoiceHandler implements IInvoiceHandler {
         lines.push('Shifts:\n');
         lines.push('  Date|Hours\n');
         for(const shift of shifts) {
-            lines.push(`  ${shift.date.toISOString().split('T')[0]}|${shift.diffHours}\n`);
+            lines.push(`  ${format(shift.date)}|${shift.diffHours}\n`);
         }
         lines.push(`Hours: ${hours}\n`);
         lines.push(`Amount Due: ${cost}\n`);
