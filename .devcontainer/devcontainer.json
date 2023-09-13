@@ -9,9 +9,11 @@
 	},
 	"customizations": {
 		"vscode": {
-			"workbench.sideBar.location": "right",
-			"git.autofetch": true,
-			"deno.enable": true
+			"settings": {
+				"workbench.sideBar.location": "right",
+				"git.autofetch": true,
+				"deno.enable": true
+			}
 		}
 	}
 
