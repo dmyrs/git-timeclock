@@ -1,4 +1,5 @@
 import { Dictionary } from "../../infra/Types/Types.ts";
+import { format } from "../DateExtensions.ts";
 import { Shift } from "../Shift/Shift.ts";
 import { sumOf } from "https://deno.land/std@0.201.0/collections/mod.ts";
 import { toFixed } from "https://deno.land/x/math@v1.1.0/to_fixed.ts";
@@ -30,7 +31,7 @@ export class Invoice{
             this.amountDue+=amountDue;
         }
         this.invoiceDir = "./.timeclock/invoices";
-        this.invoiceFilePath = `${this.invoiceDir}/${invoiceDate.toISOString().split('T')[0]}`;
+        this.invoiceFilePath = `${this.invoiceDir}/${format(invoiceDate)}`;
         this.invoicee = invoicee;
         this.company = company;
         this.invoiceDate = invoiceDate;
