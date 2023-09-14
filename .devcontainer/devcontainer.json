@@ -1,0 +1,20 @@
+{
+	"name": "dev container:ubuntu,deno",
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"denoland.vscode-deno",
+                "github.vscode-pull-request-github"
+			],
+			"settings": {
+				"workbench.sideBar.location": "right",
+				"git.autofetch": true,
+				"deno.enable": true
+			}
+		}
+	},
+	 "features": {
+		"ghcr.io/devcontainers-contrib/features/deno:1": {}
+	 }
+}
