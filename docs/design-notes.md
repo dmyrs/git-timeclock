@@ -1,12 +1,11 @@
 # Design Notes
 
-## 6/7/2024 - starting re-write after some time away
+## 6/7/2024 - 6/8/2024 - starting re-write after some time away
 
-Idea/Goal:
+## Brainstorming:
 
 - `.timeclock/` directory 
     - `CONFIG` file - set name, rate, company, project, etc
-    - `punches/` directory to store the start of a "punch"
     - the same command will add an end punch (something like `timeclock punch`) and create a "shift"
     - `shifts/` directory to store un-invoiced shifts
         - "un-invoiced shift" = a shift that hasn't been chared the the customer
@@ -48,12 +47,14 @@ File Designs:
 
     filename: INVOICE_GUID
     ```
-    COMPANY NAME
+    DMYRS Software
+    invoicing@dmyrs.com
     INVOICE DATE
     INVOICE NUMBER
 
     BILL TO:
     CUSTOMER NAME
+    CUSTOMER EMAIL
 
     LINEITEMS:
     
@@ -68,20 +69,33 @@ File Designs:
     PROJECT_GUID|INVOICE_GUID
     ```
 
+- `INCOMEFILE`
+
+    A total of the income from paid invoices. Used so it doesn't need to be calculated each time.
+
+    ```
+    INCOME_$_AMMOUNT
+    ```
+
 Directory Sturcture Design:
 ```
 .timeclock
 |_ INVOICEFILE
+|_ INCOMEFILE
 |_ PUNCHFILE
 |_ PROJECTFILE
 |_ projects/<project-guid>
+   |_ INCOMEFILE
    |_ shifts
       |_ <shift-guid>
    |_ invoices
+      |_ INVOICEFILE
       |_ <invoice-guid>
 ```
 
 Supported CLI API
+
+[Official documentation](./api-docs.md)
 
 ```
 $ timeclock shift punch -p <project name>
