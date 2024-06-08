@@ -11,7 +11,6 @@ export class PROJECTFILE {
     }
 
     private static async initAsync(path: string = './.timeclock') : Promise<PROJECTFILE> {
-        // check for existence
         let config: PROJECTFILE;
 
         if (await CheckFileExistsAsync(path+'/PROJECTFILE')) {
