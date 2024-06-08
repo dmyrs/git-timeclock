@@ -20,6 +20,14 @@
 
 File Designs:
 
+- `CONFIGFILE`
+
+    The required configuration for to run the timeclock.
+
+    ```
+    NAME:<name>|COMPANY:<copmany>|RATE:<rate>
+    ```
+
 - `PROJECTFILE`
 
     An index of all projects the user has interacted with. Each project is assigned a PROJECT_GUID.

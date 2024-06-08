@@ -1,12 +1,13 @@
-import { Configuration } from "./configuration.ts";
 import { parseArgs } from "../_lib/cli-parser.ts"
 import { PROJECTFILE as projectFile } from "./files/projectfile.ts";
 import { ShiftManager } from "./shift-manager.ts";
 import { InvoiceManager } from "./invoice-manager.ts";
+import { CONFIGFILE as configFile } from "./files/configfile.ts";
+
 
 export class TimeClock {
     public static async main() {
-        const config = await Configuration.FromEnvironmentAsync();
+        const CONFIGFILE = await configFile.readFileAsync();
         const args = parseArgs(Deno.args);
         const command = args._[0];
 
@@ -14,13 +15,13 @@ export class TimeClock {
         if (args.p && !PROJECTFILE.projectExists(args.p)) {
             await PROJECTFILE.addProjectAsync(args.p);
         }
-        const projectId = args.p ? PROJECTFILE.getProjectId(args.p) : null;
-
+        const projectId = args.p ? (await PROJECTFILE.getProjectIdAsync(args.p)) : null;
+        
         switch(command) {
             case "punch":
             {
                 if (projectId) {
-                    await ShiftManager.PunchAsync(projectId, config.rate);
+                    await ShiftManager.PunchAsync(projectId, CONFIGFILE.rate);
                     return;
                 }
                 else {
@@ -57,5 +58,6 @@ export class TimeClock {
             default:
                 throw "invalid command"
         }
+
     }
 }

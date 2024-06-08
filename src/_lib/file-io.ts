@@ -1,11 +1,24 @@
-export async function WriteFile(filename: string, contents: string, overwrite: boolean) {
-    
+import { exists } from "https://deno.land/std/fs/mod.ts";
+
+export async function ListDirectoryAsync(path: string): Promise<string[]> {
+    const files: string[] = [];
+    for await (const dirEntry of Deno.readDir(path)) {
+      if (dirEntry.isFile) {
+        files.push(dirEntry.name)
+      }
+    }
+    return files;
 }
 
-export async function ReadFile(path: string) {
-    
+export async function CheckFileExistsAsync(path: string): Promise<boolean> {
+    return await exists(path, { isFile: true });
 }
 
-export async function ListDirectory(path: string) {
-    
+export async function createDirectoryAsync(path: string): Promise<void> {
+    const dirExists = await exists(path);
+    if (!dirExists) {
+        await Deno.mkdir(path, {
+            recursive: true
+        });
+    }
 }
