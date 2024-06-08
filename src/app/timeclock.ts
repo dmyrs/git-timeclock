@@ -1,6 +1,6 @@
 import { Configuration } from "../core/configuration.ts";
 import { parseArgs } from "../_lib/cli-parser.ts"
-import { PROJECTFILE as projectFile } from "../core/files/projectsfile.ts";
+import { PROJECTFILE as projectFile } from "../core/files/projectfile.ts";
 import { PUNCHFILE as punchFile } from "../core/files/punchfile.ts";
 
 export class TimeClock {
