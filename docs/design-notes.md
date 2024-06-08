@@ -84,9 +84,9 @@ Directory Sturcture Design:
 Supported CLI API
 
 ```
-$ timeclock punch -p <project name>
+$ timeclock shift punch -p <project name>
 
-$ timeclock punch cancel
+$ timeclock shift cancel
 
 $ timeclock invoice create -p <project name>
 
@@ -103,6 +103,4 @@ $ timeclock invoice status -p <project name> -n <invoice number>
 $ timeclock income
 
 $ timeclock income -p <project name>
-
-$ timeclock reset
 ```
