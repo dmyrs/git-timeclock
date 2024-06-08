@@ -9,7 +9,7 @@ export class Configuration {
         this.company = company;
     }
 
-    public static FromEnvironment() : Configuration {
+    public static FromEnvironmentAsync() : Configuration {
         return new Configuration("", 0, "");
     }
 }

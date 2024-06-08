@@ -5,10 +5,8 @@ import { ShiftManager } from "./shift-manager.ts";
 import { InvoiceManager } from "./invoice-manager.ts";
 
 export class TimeClock {
-    constructor(private readonly _config: Configuration) 
-    {}
-
-    public async main() {
+    public static async main() {
+        const config = await Configuration.FromEnvironmentAsync();
         const args = parseArgs(Deno.args);
         const command = args._[0];
 
@@ -22,7 +20,7 @@ export class TimeClock {
             case "punch":
             {
                 if (projectId) {
-                    await ShiftManager.PunchAsync(projectId, this._config.rate);
+                    await ShiftManager.PunchAsync(projectId, config.rate);
                     return;
                 }
                 else {
