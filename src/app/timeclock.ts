@@ -1,11 +1,12 @@
-import { Configuration } from "./configuration.ts";
+import { Configuration } from "../core/configuration.ts";
+import { parseArgs } from "../_lib/cli-parser.ts"
 
 export class TimeClock {
     constructor(private readonly _config: Configuration) 
     {}
 
     public async main() {
-        const args = this.parseArgs(Deno.args);
+        const args = parseArgs(Deno.args);
         const command = args._[0];
         const project = args.p;
         const invoiceNumber = args.n;
@@ -62,22 +63,5 @@ export class TimeClock {
 
         // invoice status -p <projectname>
             // get the invoice status for a project (unpaid invoices)
-    }
-
-    private parseArgs(args: string[]): { [key: string]: any } {
-        const parsedArgs: { [key: string]: any } = { _: [] };
-
-        for (let i = 0; i < args.length; i++) {
-            if (args[i].startsWith("-")) {
-                const key = args[i].replace(/^-+/, "");
-                const value = args[i + 1];
-                parsedArgs[key] = value || true;
-                i++;
-            } else {
-                parsedArgs._.push(args[i]);
-            }
-        }
-
-        return parsedArgs;
     }
 }

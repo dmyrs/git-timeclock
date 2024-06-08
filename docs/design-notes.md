@@ -17,21 +17,92 @@ Idea/Goal:
                 - setup the path to the `.timeclock` directory in an environment variable, so it can be placed centrally on the dev's machine and shared across repos. 
     - allow the concept of "projcets" -> customer
         - one project at a time? - YES
+            - an "in repo" option that took commit notes would be cool?
 
 File Designs:
 
-- PUNCHFILE
-- INVOICES
-- PROJECTS
+- `PROJECTFILE`
+
+    An index of all projects the user has interacted with. Each project is assigned a PROJECT_GUID.
+
+    ```list
+    PROJECT_NAME|PROJECT_GUID
+    ```
+
+- `PUNCHFILE`
+
+    If this file exists, the user has "punched in" on a project.
+
+    ```singleRow
+    PROJECT_GUID|PUNCH_GUID|PUNCH_START_UTC|SHIFT_RATE
+    ```
+
+- `shifts/` files
+
+    filename: SHIFT_GUID
+    ```
+    SHIFT_START_UTC|SHIFT_END_UTC|SHIFT_RATE|SHIFT_TOTAL|PAID
+    ```
+
+- `invoices/` files
+
+    filename: INVOICE_GUID
+    ```
+    COMPANY NAME
+    INVOICE DATE
+    INVOICE NUMBER
+
+    BILL TO:
+    CUSTOMER NAME
+
+    LINEITEMS:
+    
+    TOTAL:
+    ```
+
+- `INVOICEFILE`
+
+    An index of all unpaid invoices. This file will exist once the first invoice is created.
+
+    ```list
+    PROJECT_GUID|INVOICE_GUID
+    ```
 
 Directory Sturcture Design:
 ```
 .timeclock
-|_ INVOICES
+|_ INVOICEFILE
 |_ PUNCHFILE
-|_ PROJECTS
+|_ PROJECTFILE
 |_ projects/<project-guid>
-   |_ punches
    |_ shifts
+      |_ <shift-guid>
    |_ invoices
+      |_ <invoice-guid>
+```
+
+Supported CLI API
+
+```
+$ timeclock punch -p <project name>
+
+$ timeclock punch cancel
+
+$ timeclock invoice create -p <project name>
+
+$ timeclock invoice cancel -p <project name> -n <invoice number>
+
+$ timeclock invoice paid -p <project name> -n <invoice number>
+
+$ timeclock invoice status
+
+$ timeclock invoice status -p <project name>
+
+$ timeclock invoice status -p <project name> -n <invoice number>
+
+$ timeclock income
+
+$ timeclock income -p <project name>
+
+$ timeclock reset
 ```
