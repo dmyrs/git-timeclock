@@ -1,5 +1,7 @@
 import { Configuration } from "../core/configuration.ts";
 import { parseArgs } from "../_lib/cli-parser.ts"
+import { PROJECTFILE as projectFile } from "../core/files/projectsfile.ts";
+import { PUNCHFILE as punchFile } from "../core/files/punchfile.ts";
 
 export class TimeClock {
     constructor(private readonly _config: Configuration) 
@@ -11,14 +13,27 @@ export class TimeClock {
         const project = args.p;
         const invoiceNumber = args.n;
 
+        const PROJECTFILE = await projectFile.readFileAsync();
+        
+        if (! PROJECTFILE.projectExists(project)) {
+            await PROJECTFILE.addProjectAsync(project);
+        }
+        const projectId = PROJECTFILE.getProjectId(project);
+
         switch(command) {
             case "punch":
-                // check PUNCHFILE for existing punch
-                // if exists
-                    // create a shift (in the project directory), delete PUNCHFILE
-                // else
-                    // create a punch (in the project directory), create the PUNCHFILE
-                break;
+            {
+                const PUNCHFILE = await punchFile.readFileAsync();
+                if (PUNCHFILE) {
+                    // create the shift
+                    await PUNCHFILE.deleteAsync();
+                }
+                else {
+                    const punchId = ""; // generate a GUID
+                    await punchFile.createAsync(projectId, punchId, new Date(), this._config.rate)
+                }
+                break;   
+            }
             case "invoice":
             {
                 const verb = args._[1];
@@ -47,21 +62,5 @@ export class TimeClock {
             default:
                 break;
         }
-
-        // punch -p <projectname>
-            // (create or end based on existence)
-            // (force punchout if punch in elsewhere) - keep a top level status indicator
-        
-        // invoice create -p <projcetname>
-            // aggregate all punches into an invoice - calculate total $ based on rate in config
-
-        // invoice paid -p <projcetname> -n <invoice number>
-            // mark the invoice as paid
-
-        // invoice status
-            // get the invoice status for all projcets (unpaid invoices)
-
-        // invoice status -p <projectname>
-            // get the invoice status for a project (unpaid invoices)
     }
 }
