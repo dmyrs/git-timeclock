@@ -1,4 +1,4 @@
-import { CheckFileExistsAsync, createDirectoryAsync } from "../../_lib/file-io.ts";
+import { checkFileExistsAsync, createDirectoryAsync } from "../../_lib/file-io.ts";
 
 export class CONFIGFILE {
 
@@ -14,7 +14,7 @@ export class CONFIGFILE {
         // check for existence
         let config: CONFIGFILE;
 
-        if (await CheckFileExistsAsync(path+'/CONFIGFILE')) {
+        if (await checkFileExistsAsync(path+'/CONFIGFILE')) {
             const fileText = await Deno.readTextFile(path+'/CONFIGFILE');
             const split = fileText.split('|');
             return new CONFIGFILE(split[0].split(':')[1], Number.parseFloat(split[1].split(':')[1]), split[2].split(':')[1])

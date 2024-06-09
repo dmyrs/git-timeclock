@@ -1,6 +1,6 @@
 import { exists } from "https://deno.land/std/fs/mod.ts";
 
-export async function ListDirectoryAsync(path: string): Promise<string[]> {
+export async function listDirectoryAsync(path: string): Promise<string[]> {
     const files: string[] = [];
     for await (const dirEntry of Deno.readDir(path)) {
       if (dirEntry.isFile) {
@@ -10,7 +10,7 @@ export async function ListDirectoryAsync(path: string): Promise<string[]> {
     return files;
 }
 
-export async function CheckFileExistsAsync(path: string): Promise<boolean> {
+export async function checkFileExistsAsync(path: string): Promise<boolean> {
     return await exists(path, { isFile: true });
 }
 

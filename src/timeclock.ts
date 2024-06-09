@@ -1,8 +1,8 @@
-import { parseArgs } from "../_lib/cli-parser.ts"
-import { PROJECTFILE as projectFile } from "./files/projectfile.ts";
-import { ShiftManager } from "./shift-manager.ts";
-import { InvoiceManager } from "./invoice-manager.ts";
-import { CONFIGFILE as configFile } from "./files/configfile.ts";
+import { parseArgs } from "./_lib/cli-parser.ts"
+import { PROJECTFILE as projectFile } from "./core/files/projectfile.ts";
+import { ShiftManager } from "./core/commands/shift-manager.ts";
+import { InvoiceManager } from "./core/commands/invoice-manager.ts";
+import { CONFIGFILE as configFile } from "./core/files/configfile.ts";
 
 
 export class TimeClock {
@@ -18,14 +18,20 @@ export class TimeClock {
         const projectId = args.p ? (await PROJECTFILE.getProjectIdAsync(args.p)) : null;
         
         switch(command) {
-            case "punch":
+            case "shift":
             {
-                if (projectId) {
-                    await ShiftManager.PunchAsync(projectId, CONFIGFILE.rate);
-                    return;
-                }
-                else {
-                    throw "project name must be provided"
+                const verb = args._[1];
+                switch(verb) {
+                    case "punch":
+                        if (projectId) {
+                            await ShiftManager.PunchAsync(projectId, CONFIGFILE.rate);
+                            return;
+                        }
+                        else {
+                            throw "project name must be provided"
+                        }
+                    default:
+                            throw "invalid verb for shift command"
                 }
             }
             case "invoice":
