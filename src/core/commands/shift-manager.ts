@@ -19,4 +19,10 @@ export class ShiftManager {
         const shiftId = await generateGuidAsync();
         await Deno.writeTextFile(path+`/projects/${projectId}/shifts/${shiftId}`, file);
     }
+
+    public static async CancelShiftAsync(): Promise<void> {
+        if (await punchFile.existsAsync()) {
+            await (await punchFile.readFileAsync()).deleteAsync()
+        }
+    }
 }
