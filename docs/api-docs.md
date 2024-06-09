@@ -64,19 +64,6 @@ Also provides functionality to see unpaid invoices.
     XXXXX
     ```
 
-- `cancel` - cancel an existing invoice 
-
-    #### Options
-
-    - `-p` - required - project name
-
-    #### Example
-
-    Cancel invoice number XXXXX for project "customer-api".
-    ```
-    $ timeclock invoice cancel -p customer-api -n XXXXX
-    ```
-
 - `paid` - mark an invoice as paid by the customer
 
     #### Options
@@ -105,12 +92,12 @@ Also provides functionality to see unpaid invoices.
 
     Show all unpaid invoices for the "customer-api" project.
     ```
-    $ timeclock shift punch -p customer-api
+    $ timeclock invoice status -p customer-api
     ```
 
     Show the status of invoice XXXXX in project "customer-api".
     ```
-    $ timeclock shift punch -p customer-api -n XXXXX
+    $ timeclock invoice status -p customer-api -n XXXXX
     ```
 
 ## `income`
@@ -119,7 +106,7 @@ Used to see income generated from paid invoices.
 
 ### Verbs
 
-- `punch` - create a "punch" - will either start or stop a shift
+- `report` - create a "punch" - will either start or stop a shift
 
     #### Options
 
@@ -129,10 +116,10 @@ Used to see income generated from paid invoices.
 
     See income from all projects.
     ```
-    $ timeclock income
+    $ timeclock income report
     ```
 
     See income from the "customer-api" project.
     ```
-    $ timeclock income -p customer-api
+    $ timeclock income report -p customer-api
     ```

@@ -6,7 +6,6 @@ export class ShiftManager {
         if (await punchFile.existsAsync()) {
             const PUNCHFILE = await punchFile.readFileAsync();
             await ShiftManager.CreateShiftAsync(projectId, PUNCHFILE);
-            // add to INVOICEFILEs
             await PUNCHFILE.deleteAsync();
         }
         else {

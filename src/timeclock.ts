@@ -3,6 +3,7 @@ import { PROJECTFILE as projectFile } from "./core/files/projectfile.ts";
 import { ShiftManager } from "./core/commands/shift-manager.ts";
 import { InvoiceManager } from "./core/commands/invoice-manager.ts";
 import { CONFIGFILE as configFile } from "./core/files/configfile.ts";
+import { PUNCHFILE as punchFile } from "./core/files/punchfile.ts";
 
 
 export class TimeClock {
@@ -30,6 +31,11 @@ export class TimeClock {
                         else {
                             throw "project name must be provided"
                         }
+                    case "cancel":
+                        if (await punchFile.existsAsync()) {
+                            await (await punchFile.readFileAsync()).deleteAsync()
+                        }
+                        return;
                     default:
                             throw "invalid verb for shift command"
                 }
